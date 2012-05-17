@@ -6,7 +6,8 @@
    "keywords": [
        "vastjs",
        "maxmind",
-       "geoip"
+       "geoip",
+       "ip lookup"
    ],
    "author": {
        "name": "Tommy Messbauer",
@@ -17,7 +18,7 @@
    "license": "MIT",
    "repository": {
        "type": "git",
-       "url": "git@github.com:tommydudebreaux/vastjs-maxmind.git" 
+       "url": "git@github.com:tommydudebreaux/vast-maxmind.git" 
    }, 
    "directories": {
        "tests": "tests"
