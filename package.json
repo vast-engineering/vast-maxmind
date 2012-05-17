@@ -1,5 +1,5 @@
 {
-   "name": "vastjs-maxmind",
+   "name": "vast-maxmind",
    "version": "0.0.1",
    "main": "index",
    "description": "Looks up an IP asynchronously using the maxmind database",
