@@ -1,4 +1,4 @@
-var VastMaxmind = require('../build/Release/vastmaxmind').VastMaxmind,
+var VastMaxmind = require('../index.js').VastMaxmind,
 	vmm = new VastMaxmind('/usr/local/share/GeoIP/GeoIPCity.dat'),
 	addr = "8.8.8.8";
 

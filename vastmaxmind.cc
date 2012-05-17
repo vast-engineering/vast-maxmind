@@ -7,16 +7,6 @@
 using namespace v8;
 using namespace node;
 
-struct location_result {
-    char* zip;
-    char* city;
-    char* state;
-    double latitude;
-    double longitude;
-    char* country;
-    int areacode;
-};
-
 class VastMaxmind : public ObjectWrap {
 protected:
     static Persistent<FunctionTemplate> constructor_template;
@@ -25,7 +15,7 @@ protected:
 
 public:
     VastMaxmind(char *_db) : db(_db) {
-        this->gi = GeoIP_open(this->db, GEOIP_STANDARD);// GEOIP_MEMORY_CACHE | GEOIP_INDEX_CACHE);
+        this->gi = GeoIP_open(this->db, GEOIP_MEMORY_CACHE); //GEOIP_MEMORY_CACHE | GEOIP_INDEX_CACHE);
         if (this->gi == NULL) {
             ThrowException(Exception::Error(String::New("Could not open maxmind db.")));
         }
@@ -33,6 +23,7 @@ public:
     }
     ~VastMaxmind() {
         GeoIP_delete(this->gi);
+        GeoIP_cleanup();
     }
 
     static void Initialize(Handle<Object> target) {
@@ -51,7 +42,7 @@ public:
         Persistent<Function> cb;
         char *addr;
         VastMaxmind *vmm;
-        struct location_result result;
+        GeoIPRecord *gir;
     };
 
     static Handle<Value> New(const Arguments &args) {
@@ -63,33 +54,26 @@ public:
         return args.This();
     }
 
+    
 
     static void locationWorker(uv_work_t *req) {
         iprequest *ipreq = (iprequest *)req->data;
         VastMaxmind *vmm = ipreq->vmm;
-        GeoIPRecord *gir;
-        char *na = (char *)"N/A";
 
         if (!vmm || !vmm->gi) {
             ThrowException(Exception::Error(String::New("Maxmind db not opened.")));
         }
         else {
-            gir = GeoIP_record_by_ipnum(vmm->gi, inet_addr(ipreq->addr));
-            // ipreq->result.country = ipreq->addr;
-            // ipreq->result.areacode = inet_addr(ipreq->addr);
-
-            ipreq->result.country = gir->country_code ? gir->country_code : na;
-            ipreq->result.state = gir->region ? gir->region : na;
-            ipreq->result.city = gir->city ? gir->city : na;
-            ipreq->result.zip = gir->postal_code ? gir->postal_code : na;
-            ipreq->result.latitude = gir->latitude;
-            ipreq->result.longitude = gir->longitude;
-            ipreq->result.areacode = gir->area_code;
-
-            //GeoIPRecord_delete(gir);
+            ipreq->gir = GeoIP_record_by_ipnum(vmm->gi, inet_addr(ipreq->addr));
         }
         
     }
+
+    // static char *copy(char *str) {
+    //     char *strNew = new char[ strlen(str) + 1 ];
+    //     strcpy(strNew, str);
+    //     return strNew;
+    // }
 
     static void locationAfter(uv_work_t *req) {
         ev_unref(EV_DEFAULT_UC);
@@ -97,14 +81,18 @@ public:
         HandleScope scope;
         Handle<Object> ret = Object::New();
         iprequest *ipreq = (iprequest *)req->data;
+        char *na = (char *)"N/A";
+        GeoIPRecord *gir = ipreq->gir;
 
-        ret->Set( NODE_PSYMBOL("country"), String::New(ipreq->result.country) );
-        ret->Set( NODE_PSYMBOL("state"), String::New(ipreq->result.state) );
-        ret->Set( NODE_PSYMBOL("city"), String::New(ipreq->result.city) );
-        ret->Set( NODE_PSYMBOL("zip"), String::New(ipreq->result.zip) );
-        ret->Set( NODE_PSYMBOL("latitude"), Number::New(ipreq->result.latitude) );
-        ret->Set( NODE_PSYMBOL("longitude"), Number::New(ipreq->result.longitude) );
-        ret->Set( NODE_PSYMBOL("areacode"), Number::New(ipreq->result.areacode) );
+        if (gir) {
+            ret->Set( NODE_PSYMBOL("country"), String::New(gir->country_code ? gir->country_code : na) );
+            ret->Set( NODE_PSYMBOL("state"), String::New(gir->region ? gir->region : na) );
+            ret->Set( NODE_PSYMBOL("city"), String::New(gir->city ? gir->city : na) );
+            ret->Set( NODE_PSYMBOL("zip"), String::New(gir->postal_code ? gir->postal_code : na) );
+            ret->Set( NODE_PSYMBOL("latitude"), Number::New( gir->latitude) );
+            ret->Set( NODE_PSYMBOL("longitude"), Number::New( gir->longitude) );
+            ret->Set( NODE_PSYMBOL("areacode"), Number::New( gir->area_code) );
+        }
 
         Local<Value> argv[1];
         argv[0] = Local<Value>::Local(ret->ToObject());
