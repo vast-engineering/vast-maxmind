@@ -1,0 +1,25 @@
+vast-maxmind is a node wrapper for the maxmind GeoIP location service.   It leverages the Maxmind C API which you should download and install from here before starting to use this module.
+
+[http://www.maxmind.com/app/c][2]
+
+This first iteration is limited functionality
+
+ - Supports the City data:  [http://www.maxmind.com/app/geolitecity][2]
+ - Only supports lookup by IP address.  Named hosts and more features will likely come later (time permitting)
+
+Please check out the tests folder for the demo.  
+
+
+    var VastMaxmind = require('../build/Release/vastmaxmind').VastMaxmind,
+      vmm = new VastMaxmind('/usr/local/share/GeoIP/GeoIPCity.dat'),
+    	addr = "8.8.8.8";
+    
+    var foo = vmm.location(addr, function(data) {
+    	console.log(JSON.stringify(data) );
+    	process.exit();
+    });
+
+
+
+  [1]: http://www.maxmind.com/app/c
+  [2]: http://www.maxmind.com/app/geolitecity
