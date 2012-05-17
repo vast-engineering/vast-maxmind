@@ -1,32 +1,32 @@
 {
-   "name": "vastjs-maxmind",
-   "version": "0.0.1",
-   "main": "index",
-   "description": "Looks up an IP asynchronously using the maxmind database",
-   "keywords": [
-       "vastjs",
-       "maxmind",
-       "geoip",
-       "ip lookup"
-   ],
-   "author": {
-       "name": "Tommy Messbauer",
-       "email": "tommy@vast.com",
-       "web": "http://www.vast.com",
-       "twitter": "tommydudebreaux"
-   }, 
-   "license": "MIT",
-   "repository": {
-       "type": "git",
-       "url": "git@github.com:tommydudebreaux/vast-maxmind.git" 
-   }, 
-   "directories": {
-       "tests": "tests"
-   },
-   "engines": {
-       "node": ">=0.6.0"
-   },
-   "scripts": {
-       "install": "node-waf configure build"
-   }
+  "name": "vastjs-maxmind",
+  "version": "0.0.1",
+  "main": "index",
+  "description": "Looks up an IP asynchronously using the maxmind database",
+  "keywords": [
+    "vastjs",
+    "maxmind",
+    "geoip",
+    "ip lookup"
+  ],
+  "author": "Tommy Messbauer <tommy@vast.com> (http://tommydude.com)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:tommydudebreaux/vast-maxmind.git"
+  },
+  "directories": {
+    "tests": "tests"
+  },
+  "engines": {
+    "node": ">=0.6.0"
+  },
+  "scripts": {
+    "install": "node-waf configure build",
+    "test": "node /tests/lookup.js"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "optionalDependencies": {},
+  "homepage": "http://vastdevblog.vast.com/"
 }
