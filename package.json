@@ -1,5 +1,5 @@
 {
-   "name": "vast-maxmind",
+  "name": "vast-maxmind",
    "version": "0.0.2",
    "main": "index",
    "description": "Looks up an IP asynchronously using the maxmind database.  Be sure to install maxmind C API first and test from the command line.  http://www.maxmind.com/app/c",
@@ -16,18 +16,23 @@
        "twitter": "tommydudebreaux"
    }, 
    "license": "MIT",
-   "repository": {
-       "type": "git",
-       "url": "git@github.com:tommydudebreaux/vast-maxmind.git" 
-   }, 
-   "directories": {
-       "tests": "tests"
-   },
-   "engines": {
-       "node": ">=0.6.0"
-   },
-   "scripts": {
-       "install": "node-waf configure build"
-   }
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:tommydudebreaux/vast-maxmind.git"
+  },
+  "directories": {
+    "tests": "tests"
+  },
+  "engines": {
+    "node": ">=0.6.0"
+  },
+  "scripts": {
+    "install": "node-waf configure build",
+    "test": "node /tests/lookup.js"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "optionalDependencies": {},
+  "homepage": "http://vastdevblog.vast.com/"
 }
 
