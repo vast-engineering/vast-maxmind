@@ -106,7 +106,6 @@ public:
 
         ipreq->cb.Dispose();
         ipreq->vmm->Unref();
-        free(ipreq->addr);
         free(ipreq);
         scope.Close(Undefined());
     }
