@@ -1,6 +1,6 @@
 {
   "name": "vast-maxmind",
-   "version": "0.0.3",
+   "version": "0.0.4",
    "main": "index",
    "description": "Looks up an IP asynchronously using the maxmind database.  Be sure to install maxmind C API first and test from the command line.  http://www.maxmind.com/app/c",
    "keywords": [
