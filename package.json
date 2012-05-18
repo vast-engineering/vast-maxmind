@@ -30,7 +30,9 @@
     "install": "node-waf configure build",
     "test": "node /tests/lookup.js"
   },
-  "dependencies": {},
+  "dependencies": {
+    "optimist": "*"
+    },
   "devDependencies": {},
   "optionalDependencies": {},
   "homepage": "http://vastdevblog.vast.com/"

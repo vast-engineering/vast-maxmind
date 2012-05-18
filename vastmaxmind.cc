@@ -41,6 +41,7 @@ public:
     struct iprequest {
         Persistent<Function> cb;
         char *addr;
+        uint ipnum;
         VastMaxmind *vmm;
         GeoIPRecord *gir;
     };
@@ -54,17 +55,43 @@ public:
         return args.This();
     }
 
+    static int translateIp(char *ipaddr) {
+        char *str = new char[16];
+        char *tok;
+        int *parts = new int[4];
+        int ipnum = 0;
+
+        strcpy(str, ipaddr);
+        tok = strtok(str, "."); // should be 4 groups of digits
+
+        for(int i=0; i < 4; i++) {
+            if (tok != NULL) {
+                parts[i] = atoi(tok);
+                tok = strtok(NULL, ".");
+            }
+        }
+
+        ipnum = 16777216*parts[0] + 65536*parts[1] + 256*parts[2] + parts[3];
+        delete [] parts;  
+        delete [] str;
+
+        return ipnum;
+    }
+
     
 
     static void locationWorker(uv_work_t *req) {
-        iprequest *ipreq = (iprequest *)req->data;
+        iprequest *ipreq = static_cast<iprequest *>(req->data);
         VastMaxmind *vmm = ipreq->vmm;
 
-        if (!vmm || !vmm->gi) {
-            ThrowException(Exception::Error(String::New("Maxmind db not opened.")));
+
+        ipreq->ipnum = translateIp(ipreq->addr);
+
+        if (ipreq->ipnum > 0 && vmm && vmm->gi) {
+            ipreq->gir = GeoIP_record_by_ipnum(vmm->gi, ipreq->ipnum);
         }
         else {
-            ipreq->gir = GeoIP_record_by_ipnum(vmm->gi, inet_addr(ipreq->addr));
+            ThrowException(Exception::Error(String::New("Maxmind db not opened.")));
         }
         
     }
@@ -76,13 +103,15 @@ public:
     // }
 
     static void locationAfter(uv_work_t *req) {
-        ev_unref(EV_DEFAULT_UC);
-
         HandleScope scope;
         Handle<Object> ret = Object::New();
-        iprequest *ipreq = (iprequest *)req->data;
+        iprequest *ipreq = static_cast<iprequest *>(req->data);
         char *na = (char *)"N/A";
         GeoIPRecord *gir = ipreq->gir;
+
+        // return the searched ip
+        ret->Set( NODE_PSYMBOL("ip"), String::New(ipreq->addr) );
+        ret->Set( NODE_PSYMBOL("ipnum"), Number::New(ipreq->ipnum) );
 
         if (gir) {
             ret->Set( NODE_PSYMBOL("country"), String::New(gir->country_code ? gir->country_code : na) );
@@ -105,19 +134,19 @@ public:
             FatalException(try_catch);
 
         ipreq->cb.Dispose();
-        ipreq->vmm->Unref();
-        free(ipreq);
+        delete ipreq;
+        delete req;
+
         scope.Close(Undefined());
     }
 
     static Handle<Value> location(const Arguments &args) {
         HandleScope scope;
-        String::Utf8Value ipaddr(args[0]->ToString());
-
+        String::Utf8Value ipaddr(args[0]);
         Local<Function> cb = Local<Function>::Cast(args[1]);
-        VastMaxmind *vmm = ObjectWrap::Unwrap<VastMaxmind>(args.This());
+        VastMaxmind *vmm = ObjectWrap::Unwrap<VastMaxmind>(args.Holder());
+        iprequest *request = new iprequest;
 
-        iprequest *request = (iprequest *)malloc(sizeof(iprequest));
         request->cb = Persistent<Function>::New(cb);
         request->vmm = vmm;
         request->addr = *ipaddr;
@@ -127,8 +156,6 @@ public:
         req->data = request;
         uv_queue_work(uv_default_loop(), req, locationWorker, locationAfter);
 
-        ev_ref(EV_DEFAULT_UC);
-        vmm->Ref();
         scope.Close(Undefined());
 
         return Undefined(); //Handle<String>(args[0]->ToString());
