@@ -121,6 +121,7 @@ public:
             ret->Set( NODE_PSYMBOL("latitude"), Number::New( gir->latitude) );
             ret->Set( NODE_PSYMBOL("longitude"), Number::New( gir->longitude) );
             ret->Set( NODE_PSYMBOL("areacode"), Number::New( gir->area_code) );
+            GeoIPRecord_delete(gir);
         }
 
         Local<Value> argv[1];
@@ -136,8 +137,6 @@ public:
         ipreq->cb.Dispose();
         delete ipreq;
         delete req;
-        GeoIPRecord_delete(gir);
-        scope.Close(Undefined());
     }
 
     static Handle<Value> location(const Arguments &args) {
