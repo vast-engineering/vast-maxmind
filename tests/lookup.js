@@ -17,7 +17,8 @@ if(argv.help) {
 setTimeout(function() {
 
 var VastMaxmind = require('../index.js').VastMaxmind,
-	vmm = new VastMaxmind('/usr/local/share/GeoIP/GeoIPCity.dat'),
+	vmm = new VastMaxmind('/usr/local/share/GeoIP/GeoIPCity.dat'),  // local dev
+	//vmm = new VastMaxmind('/var/lib/GeoIP/GeoIPCity.dat'), // yunm install location.
 	addr = argv.i;
 
 if (!addr) {

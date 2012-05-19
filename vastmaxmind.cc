@@ -81,7 +81,7 @@ public:
     
 
     static void locationWorker(uv_work_t *req) {
-        iprequest *ipreq = static_cast<iprequest *>(req->data);
+        iprequest *ipreq = (iprequest *)(req->data);
         VastMaxmind *vmm = ipreq->vmm;
 
 
@@ -96,16 +96,16 @@ public:
         
     }
 
-    // static char *copy(char *str) {
-    //     char *strNew = new char[ strlen(str) + 1 ];
-    //     strcpy(strNew, str);
-    //     return strNew;
-    // }
+    static char *copy(char *str) {
+        char *strNew = new char[ strlen(str) + 1 ];
+        strcpy(strNew, str);
+        return strNew;
+    }
 
     static void locationAfter(uv_work_t *req) {
         HandleScope scope;
         Handle<Object> ret = Object::New();
-        iprequest *ipreq = static_cast<iprequest *>(req->data);
+        iprequest *ipreq = (iprequest *)(req->data);
         char *na = (char *)"N/A";
         GeoIPRecord *gir = ipreq->gir;
 
@@ -136,7 +136,7 @@ public:
         ipreq->cb.Dispose();
         delete ipreq;
         delete req;
-
+        GeoIPRecord_delete(gir);
         scope.Close(Undefined());
     }
 
@@ -149,7 +149,7 @@ public:
 
         request->cb = Persistent<Function>::New(cb);
         request->vmm = vmm;
-        request->addr = *ipaddr;
+        request->addr = copy(*ipaddr);
 
         //eio_custom(EIO_location, EIO_PRI_DEFAULT, EIO_locationAfter, req);
         uv_work_t* req = new uv_work_t();
