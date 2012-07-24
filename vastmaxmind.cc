@@ -135,7 +135,6 @@ public:
             FatalException(try_catch);
 
         ipreq->cb.Dispose();
-        delete ipreq;
         delete req;
     }
 
