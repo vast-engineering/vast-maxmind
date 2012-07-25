@@ -61,7 +61,7 @@ public:
         int *parts = new int[4];
         int ipnum = 0;
 
-        strcpy(str, ipaddr);
+        strncpy(str, ipaddr, 15);
         tok = strtok(str, "."); // should be 4 groups of digits
 
         for(int i=0; i < 4; i++) {
@@ -135,6 +135,7 @@ public:
             FatalException(try_catch);
 
         ipreq->cb.Dispose();
+        delete ipreq;
         delete req;
     }
 
