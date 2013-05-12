@@ -125,7 +125,7 @@ public:
         }
 
         Local<Value> argv[1];
-        argv[0] = Local<Value>::Local(ret->ToObject());
+        argv[0] = Local<Value>(ret->ToObject());
 
         TryCatch try_catch;
 
@@ -153,7 +153,7 @@ public:
         //eio_custom(EIO_location, EIO_PRI_DEFAULT, EIO_locationAfter, req);
         uv_work_t* req = new uv_work_t();
         req->data = request;
-        uv_queue_work(uv_default_loop(), req, locationWorker, locationAfter);
+        uv_queue_work(uv_default_loop(), req, locationWorker, (uv_after_work_cb)locationAfter);
 
         scope.Close(Undefined());
 
@@ -170,3 +170,5 @@ init(Handle<Object> target)
 
     VastMaxmind::Initialize(target);
 }
+
+NODE_MODULE(vastmaxmind, init);
