@@ -38,8 +38,6 @@
     "lodash": "*"
   },
   "optionalDependencies": {},
-  "homepage": "http://vastdevblog.vast.com/",
-  "private": true,
-  "gypfile": true
+  "homepage": "http://vastdevblog.vast.com/"
 }
 
