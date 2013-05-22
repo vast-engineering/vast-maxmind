@@ -1,5 +1,3 @@
-// #ifndef BUILDING_NODE_EXTENSION
-#define BUILDING_NODE_EXTENSION
 #ifndef VASTMAXMIND_H
 #define VASTMAXMIND_H
 #include <node.h>
@@ -25,4 +23,3 @@ class VastMaxmind : public node::ObjectWrap {
 };
 
 #endif
-// #endif

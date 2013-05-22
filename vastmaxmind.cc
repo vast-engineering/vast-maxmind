@@ -1,5 +1,3 @@
-// #ifndef BUILDING_NODE_EXTENSION
-#define BUILDING_NODE_EXTENSION
 #include <node.h>
 #include <node_buffer.h>
 #include <string.h>

@@ -1,4 +1,3 @@
-// #ifndef BUILDING_NODE_EXTENSION
 #define BUILDING_NODE_EXTENSION
 #include <node.h>
 #include "vastmaxmind.h"
@@ -11,4 +10,3 @@ void InitAll(Handle<Object> exports) {
 
 NODE_MODULE(index, InitAll)
 
-// #endif
