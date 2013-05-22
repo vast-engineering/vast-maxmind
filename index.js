@@ -1,1 +1,1 @@
-module.exports = require('./build/Release/vastmaxmind');
+module.exports = require('./build/Release/index');

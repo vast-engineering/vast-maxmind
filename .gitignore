@@ -2,3 +2,4 @@
 /node_modules/
 .lock-wscript
 npm-debug.log
+build_error.log
