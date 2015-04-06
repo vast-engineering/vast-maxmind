@@ -1,24 +1,19 @@
 {
   "name": "vast-maxmind",
-   "version": "1.0.1",
-   "main": "index",
-   "description": "Looks up an IP asynchronously using the maxmind database.  Be sure to install maxmind C API first and test from the command line.  http://www.maxmind.com/app/c",
-   "keywords": [
-     "vastjs",
-     "maxmind",
-     "geoip",
-     "ip lookup"
+  "version": "1.0.1",
+  "main": "index",
+  "description": "Looks up an IP asynchronously using the maxmind database.  Be sure to install maxmind C API first and test from the command line.  http://www.maxmind.com/app/c",
+  "keywords": [
+    "vastjs",
+    "maxmind",
+    "geoip",
+    "ip lookup"
   ],
-  "author": {
-   "name": "Tommy Messbauer",
-   "email": "tommy@vast.com",
-   "web": "http://www.vast.com",
-   "twitter": "tommydudebreaux"
-  }, 
+  "author": "Tommy Messbauer - Vast",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git@github.com:tommydudebreaux/vast-maxmind.git"
+    "url": "git@github.com/vast-engineering/vast-maxmind.git"
   },
   "directories": {
     "tests": "tests"
@@ -30,8 +25,7 @@
     "install": "node-gyp rebuild",
     "test": "node tests/unit.js"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "optimist": "*",
     "tap": "*",
@@ -40,4 +34,3 @@
   "optionalDependencies": {},
   "homepage": "http://vastdevblog.vast.com/"
 }
-

@@ -30,7 +30,7 @@ int VastMaxmind::translateIp(char *ipaddr) {
   }
 
   ipnum = 16777216*parts[0] + 65536*parts[1] + 256*parts[2] + parts[3];
-  delete [] parts;  
+  delete [] parts;
   delete [] str;
 
   return ipnum;
@@ -49,7 +49,7 @@ void VastMaxmind::locationWorker(uv_work_t *req) {
     else {
         ThrowException(Exception::Error(String::New("Maxmind db not opened.")));
     }
-    
+
 }
 
 void VastMaxmind::locationAfter(uv_work_t *req, int status) {
@@ -85,6 +85,8 @@ void VastMaxmind::locationAfter(uv_work_t *req, int status) {
         node::FatalException(try_catch);
 
     ipreq->cb.Dispose();
+
+    delete ipreq->addr;
     delete ipreq;
     delete req;
 }
